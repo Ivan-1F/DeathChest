@@ -19,9 +19,18 @@ def place_item(x, y, z, slot, item, server):
 def transfer_item_to_chest(x, y, z, server, player):
     PlayerInfoAPI = server.get_plugin_instance("PlayerInfoAPI")
     Inventory = PlayerInfoAPI.getPlayerInfo(server, player, "Inventory")
+    if len(Inventory) > 27:
+        server.execute("setblock {} {} {} chest[type=right]".format(x, y, z))
+        server.execute("setblock {} {} {} chest[type=left]".format(x - 1, y, z))
+    else:
+        server.execute("setblock {} {} {} chest".format(x, y, z))
+
     pos = 0
     # server.say(Inventory)
     for i in range(0, len(Inventory)):
+        if i == 27:
+            x -= 1
+            pos = 0
         place_item(x, y, z, pos, convert_item(Inventory[i]), server)
         pos += 1
 
@@ -31,9 +40,8 @@ def on_death_message(server, death_message):
     pos_x = int(PlayerInfoAPI.getPlayerInfo(server, player, "Pos")[0])
     pos_y = int(PlayerInfoAPI.getPlayerInfo(server, player, "Pos")[1])
     pos_z = int(PlayerInfoAPI.getPlayerInfo(server, player, "Pos")[2])
-    # server.say("[x:{}, y:{}, z:{}]".format(int(pos_x), int(pos_y), int(pos_z)))
-    # server.execute("execute if block {} {} {} minecraft:air".format(pos_x, pos_y, pos_z))
-    server.execute("setblock {} {} {} chest".format(pos_x, pos_y, pos_z))
+
+    # server.execute("setblock {} {} {} chest".format(pos_x, pos_y, pos_z))
     transfer_item_to_chest(pos_x, pos_y, pos_z, server, player)
     server.execute("clear " + player)
     server.execute("/xp set " + player + " 0 levels")
