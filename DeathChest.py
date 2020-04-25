@@ -36,6 +36,8 @@ def on_death_message(server, death_message):
     server.execute("setblock {} {} {} chest".format(pos_x, pos_y, pos_z))
     transfer_item_to_chest(pos_x, pos_y, pos_z, server, player)
     server.execute("clear " + player)
+    server.execute("/xp set " + player + " 0 levels")
+    server.execute("/xp set " + player + " 0 points")
 
 def on_info(server, info):
     if info.content == "!!debug":
