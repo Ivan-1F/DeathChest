@@ -46,6 +46,7 @@ def on_death_message(server, death_message):
     server.execute("clear " + player)
     server.execute("/xp set " + player + " 0 levels")
     server.execute("/xp set " + player + " 0 points")
+    server.tell(player, "§a成功在[x:{}, y:{}, z:{}]§a生成了死亡箱§r".format(pos_x, pos_y, pos_z))
 
 def on_info(server, info):
     if info.content == "!!debug":
